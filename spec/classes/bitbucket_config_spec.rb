@@ -21,8 +21,6 @@ describe 'bitbucket' do
                 .with_content(%r{JAVA_HOME=\/opt\/java})
                 .with_content(/^JVM_MINIMUM_MEMORY="256m"/)
                 .with_content(/^JVM_MAXIMUM_MEMORY="1024m"/)
-                .with_content(/^BITBUCKET_MAX_PERM_SIZE=256m/)
-                .with_content(/JAVA_OPTS="/)
             end
             it { should contain_file('/opt/bitbucket/atlassian-bitbucket-3.7.0/bin/user.sh') }
             it do
@@ -146,18 +144,6 @@ describe 'bitbucket' do
             it do
               should contain_file('/opt/bitbucket/atlassian-bitbucket-3.7.0/bin/setenv.sh')
                 .with_content(/^JVM_MAXIMUM_MEMORY="4G"/)
-            end
-          end
-
-          context 'jvm_permgen => 384m' do
-            let(:params) do
-              { :version     => '3.7.0',
-                :jvm_permgen => '384m',
-              }
-            end
-            it do
-              should contain_file('/opt/bitbucket/atlassian-bitbucket-3.7.0/bin/setenv.sh')
-                .with_content(/^BITBUCKET_MAX_PERM_SIZE=384m/)
             end
           end
 

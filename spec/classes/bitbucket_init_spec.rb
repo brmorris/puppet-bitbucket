@@ -17,7 +17,6 @@ describe 'bitbucket' do
           it { is_expected.to contain_class('bitbucket::backup') }
           it { is_expected.to contain_class('bitbucket::service').that_subscribes_to('bitbucket::config') }
           it { is_expected.to contain_anchor('bitbucket::end').that_requires('bitbucket::service') }
-          it { is_expected.to contain_class('archive') }
           it { is_expected.to contain_service('bitbucket') }
         end
       end

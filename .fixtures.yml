@@ -5,6 +5,6 @@ fixtures:
     stdlib: "http://github.com/puppetlabs/puppetlabs-stdlib.git"
     inifile: "http://github.com/puppetlabs/puppetlabs-inifile.git"
     repoforge: "http://github.com/Mylezeem/puppet-repoforge.git"
-    archive: "http://github.com/puppet-community/puppet-archive"
+    archive: "http://github.com/camptocamp/puppet-archive.git"
     staging: "http://github.com/puppet-community/puppet-staging"
     mysql_java_connector: "http://github.com/puppet-community/puppet-mysql_java_connector"

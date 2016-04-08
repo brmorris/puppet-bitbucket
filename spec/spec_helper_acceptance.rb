@@ -48,7 +48,7 @@ RSpec.configure do |c|
         on host, '/usr/sbin/update-locale'
       end
       on host, puppet('module', 'install', 'mkrakowitzer-deploy'), :acceptable_exit_codes => [0, 1]
-      on host, '/usr/bin/git clone https://github.com/puppet-community/puppet-archive.git /etc/puppet/modules/archive'
+      on host, '/usr/bin/git clone https://github.com/camptocamp/puppet-archive.git /etc/puppet/modules/archive'
       on host, puppet('module', 'install', 'nanliu-staging'), :acceptable_exit_codes => [0, 1]
       on host, puppet('module', 'install', 'puppetlabs-inifile'), :acceptable_exit_codes => [0, 1]
       on host, puppet('module', 'install', 'puppetlabs-java'), :acceptable_exit_codes => [0, 1]

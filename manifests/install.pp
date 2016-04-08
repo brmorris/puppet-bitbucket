@@ -20,7 +20,7 @@ class bitbucket::install(
   $webappdir,
   ) {
 
-  include '::archive'
+  #include '::archive'
   
   if $manage_usr_grp {
     #Manage the group in the module
@@ -84,20 +84,17 @@ class bitbucket::install(
     }
     'archive': {
       $checksum_verify = $checksum ? { undef => false, default => true }
-      archive { "/tmp/${file}":
-        ensure          => present,
-        extract         => true,
-        extract_path    => $installdir,
-        source          => "${download_url}/${file}",
-        creates         => "${webappdir}/conf",
-        cleanup         => true,
-        checksum_type   => 'md5',
-        checksum        => $checksum,
-        checksum_verify => $checksum_verify,
-        user            => $user,
-        group           => $group,
-        before          => File[$webappdir],
-        require         => [
+      $file_without_extension = regsubst($file, '\.tar\.gz', '', 'G')
+      archive { $file_without_extension:
+        ensure     => present,
+        target     => $installdir,
+        url        => "${download_url}/${file}",
+        src_target => '/tmp',
+        timeout    => 360,
+        checksum   => false, # checksum were sometimes checked when file doesn't exists, so let's not do it
+        user       => $user,
+        before     => File[$webappdir],
+        require    => [
           File[$installdir],
           User[$user],
         ],
@@ -114,7 +111,6 @@ class bitbucket::install(
     group   => $group,
     require => User[$user],
   } ->
-
   exec { "chown_${webappdir}":
     command     => "/bin/chown -R ${user}:${group} ${webappdir}",
     refreshonly => true,

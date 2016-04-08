@@ -11,12 +11,9 @@ describe 'bitbucket' do
 
           context 'install bitbucket backup client with default params' do
             it 'should deploy bitbucket backup client 2.0.2 from zip' do
-              should contain_archive("/tmp/bitbucket-backup-distribution-#{BACKUP_VERSION}.zip")
-                .with('source' => "https://maven.atlassian.com/content/groups/public/com/atlassian/bitbucket/server/backup/bitbucket-backup-distribution/#{BACKUP_VERSION}/bitbucket-backup-distribution-#{BACKUP_VERSION}.zip",
-                      'extract_path' => '/opt/bitbucket-backup',
-                      'creates' => "/opt/bitbucket-backup/bitbucket-backup-client-#{BACKUP_VERSION}/lib",
-                      'user' => 'atlbitbucket',
-                      'group' => 'atlbitbucket',)
+              should contain_archive("bitbucket-backup-distribution-#{BACKUP_VERSION}")
+                .with('url' => "https://maven.atlassian.com/content/groups/public/com/atlassian/bitbucket/server/backup/bitbucket-backup-distribution/#{BACKUP_VERSION}/bitbucket-backup-distribution-#{BACKUP_VERSION}.zip",
+                      'target' => '/opt/bitbucket-backup',)
             end
 
             it 'should manage the bitbucket-backup directories' do
@@ -27,7 +24,7 @@ describe 'bitbucket' do
               should contain_file("/opt/bitbucket-backup/bitbucket-backup-client-#{BACKUP_VERSION}")
                 .with('ensure' => 'directory',
                       'owner'  => 'atlbitbucket',
-                      'group'  => 'atlbitbucket').that_requires("Archive[/tmp/bitbucket-backup-distribution-#{BACKUP_VERSION}.zip]")
+                      'group'  => 'atlbitbucket').that_requires("Archive[bitbucket-backup-distribution-#{BACKUP_VERSION}]")
 
               should contain_file('/opt/bitbucket-backup/archives')
                 .with('ensure' => 'directory',
@@ -68,12 +65,9 @@ describe 'bitbucket' do
               { :backupclient_version => '99.43.111' }
             end
             it do
-              should contain_archive('/tmp/bitbucket-backup-distribution-99.43.111.zip')
-                .with('source' => 'https://maven.atlassian.com/content/groups/public/com/atlassian/bitbucket/server/backup/bitbucket-backup-distribution/99.43.111/bitbucket-backup-distribution-99.43.111.zip',
-                      'extract_path' => '/opt/bitbucket-backup',
-                      'creates' => '/opt/bitbucket-backup/bitbucket-backup-client-99.43.111/lib',
-                      'user' => 'atlbitbucket',
-                      'group' => 'atlbitbucket',)
+              should contain_archive('bitbucket-backup-distribution-99.43.111')
+                .with('url' => 'https://maven.atlassian.com/content/groups/public/com/atlassian/bitbucket/server/backup/bitbucket-backup-distribution/99.43.111/bitbucket-backup-distribution-99.43.111.zip',
+                      'target' => '/opt/bitbucket-backup',)
               should contain_file('/opt/bitbucket-backup/bitbucket-backup-client-99.43.111')
                 .with('ensure' => 'directory',
                       'owner'  => 'atlbitbucket',

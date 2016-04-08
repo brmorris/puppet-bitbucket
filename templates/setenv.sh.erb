@@ -4,7 +4,7 @@
 # /bitbucket/home.  You can of course set it outside in the command terminal; that will also work.
 #
 BITBUCKET_HOME="<%= scope.lookupvar('bitbucket::homedir') %>"
-JAVA_HOME=<%= scope.lookupvar('bitbucket::javahome') %>
+JAVA_HOME="<%= scope.lookupvar('bitbucket::javahome') %>"
 
 #
 # Additional JAVA_OPTS
@@ -270,9 +270,9 @@ fi
 
 JAVA_OPTS="-Xms${JVM_MINIMUM_MEMORY} -Xmx${JVM_MAXIMUM_MEMORY} ${JAVA_OPTS} ${JVM_REQUIRED_ARGS} ${JVM_SUPPORT_RECOMMENDED_ARGS} ${BITBUCKET_HOME_MINUSD}"
 
-# PermGen size needs to be increased if encountering OutOfMemoryError: PermGen problems.
-BITBUCKET_MAX_PERM_SIZE=<%= scope.lookupvar('bitbucket::jvm_permgen') %>
-JAVA_OPTS="-XX:MaxPermSize=${BITBUCKET_MAX_PERM_SIZE} ${JAVA_OPTS}"
+# Bitbucket supports only JVM 1.8+ and PermGen is not supported since JVM 1.8
+#BITBUCKET_MAX_PERM_SIZE=<%= scope.lookupvar('bitbucket::jvm_permgen') %>
+#JAVA_OPTS="-XX:MaxPermSize=${BITBUCKET_MAX_PERM_SIZE} ${JAVA_OPTS}"
 
 CATALINA_OPTS="${JMX_OPTS} ${CATALINA_OPTS}"
 export CATALINA_OPTS

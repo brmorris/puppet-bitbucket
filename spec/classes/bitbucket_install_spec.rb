@@ -13,13 +13,9 @@ describe 'bitbucket' do
           end
 
           it 'should deploy bitbucket from archive' do
-            should contain_archive("/tmp/atlassian-bitbucket-#{BITBUCKET_VERSION}.tar.gz")
-              .with('extract_path' => '/opt/bitbucket',
-                    'source' => "https://downloads.atlassian.com/software/stash/downloads/atlassian-bitbucket-#{BITBUCKET_VERSION}.tar.gz",
-                    'creates' => "/opt/bitbucket/atlassian-bitbucket-#{BITBUCKET_VERSION}/conf",
-                    'user' => 'atlbitbucket',
-                    'group' => 'atlbitbucket',
-                    'checksum_type' => 'md5',)
+            should contain_archive("atlassian-bitbucket-#{BITBUCKET_VERSION}")
+              .with('target' => '/opt/bitbucket',
+                    'url' => "https://downloads.atlassian.com/software/stash/downloads/atlassian-bitbucket-#{BITBUCKET_VERSION}.tar.gz",)
           end
 
           it 'should manage the bitbucket home directory' do
@@ -33,7 +29,7 @@ describe 'bitbucket' do
             should contain_file("/opt/bitbucket/atlassian-bitbucket-#{BITBUCKET_VERSION}")
               .with('ensure' => 'directory',
                     'owner' => 'atlbitbucket',
-                    'group' => 'atlbitbucket').that_requires("Archive[/tmp/atlassian-bitbucket-#{BITBUCKET_VERSION}.tar.gz]")
+                    'group' => 'atlbitbucket').that_requires("Archive[atlassian-bitbucket-#{BITBUCKET_VERSION}]")
           end
 
           context 'when managing the user and group inside the module' do

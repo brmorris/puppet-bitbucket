@@ -80,4 +80,5 @@ class bitbucket::config(
       File[$bitbucket::homedir]
     ],
   }
+
 }

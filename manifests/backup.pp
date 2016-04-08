@@ -22,8 +22,6 @@ class bitbucket::backup(
   $keep_age             = $bitbucket::backup_keep_age,
   ) {
 
-  $appdir = "${backup_home}/${product}-backup-client-${version}"
-
   file { $backup_home:
     ensure => 'directory',
     owner  => $user,
@@ -35,14 +33,17 @@ class bitbucket::backup(
     group  => $group,
   }
 
-  $file = "${product}-backup-distribution-${version}.${backup_format}"
+  $appdir = "${backup_home}/${product}-backup-client-${version}"
 
   file { $appdir:
     ensure => 'directory',
     owner  => $user,
     group  => $group,
   }
-  
+
+  $file_without_extension = "${product}-backup-distribution-${version}"
+  $file = "${file_without_extension}.${backup_format}"
+
   file { '/var/tmp/downloadurl':
     content => "${download_url}/${version}/${file}",
   }
@@ -64,16 +65,16 @@ class bitbucket::backup(
       }
     }
     'archive': {
-      archive { "/tmp/${file}":
-        ensure       => present,
-        extract      => true,
-        extract_path => $backup_home,
-        source       => "${download_url}/${version}/${file}",
-        user         => $user,
-        group        => $group,
-        creates      => "${appdir}/lib",
-        cleanup      => true,
-        before       => File[$appdir],
+      archive { $file_without_extension:
+        ensure     => present,
+        target     => $backup_home,
+        url        => "${download_url}/${version}/${file}",
+        extension  => 'zip',
+        src_target => '/tmp',
+        checksum   => false, # Atlassian SHA1 sum files for backup client are incorrectly formatted
+        timeout    => 360,
+        user       => $user,
+        before     => File[$appdir],
       }
     }
     default: {
