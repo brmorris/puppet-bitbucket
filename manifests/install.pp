@@ -20,8 +20,6 @@ class bitbucket::install(
   $webappdir,
   ) {
 
-  #include '::archive'
-  
   if $manage_usr_grp {
     #Manage the group in the module
     group { $group:
@@ -51,7 +49,8 @@ class bitbucket::install(
   }
 
   # Deploy files using either staging or deploy modules.
-  $file = "atlassian-${product}-${version}.${format}"
+  $file_without_extension = "atlassian-${product}-${version}"
+  $file = "${file_without_extension}.${format}"
 
   if ! defined(File[$webappdir]) {
     file { $webappdir:
@@ -84,7 +83,6 @@ class bitbucket::install(
     }
     'archive': {
       $checksum_verify = $checksum ? { undef => false, default => true }
-      $file_without_extension = regsubst($file, '\.tar\.gz', '', 'G')
       archive { $file_without_extension:
         ensure     => present,
         target     => $installdir,
@@ -101,7 +99,7 @@ class bitbucket::install(
       }
     }
     default: {
-      fail('deploy_module parameter must equal "archive" or staging""')
+      fail('deploy_module parameter must equal "archive" or "staging"')
     }
   }
 

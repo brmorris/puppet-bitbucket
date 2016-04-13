@@ -32,16 +32,19 @@ class bitbucket::facts(
     $dir      = ''
   }
 
-  if ! defined(File["/etc/${dir}facter"]) {
-    file { "/etc/${dir}facter":
-      ensure  => directory,
-    }
-  }
-  if ! defined(File["/etc/${dir}facter/facts.d"]) {
-    file { "/etc/${dir}facter/facts.d":
-      ensure  => directory,
-    }
-  }
+  # I had to comment below declarations because of 'Duplicate declaration' error
+  # (Using "if defined()" in our code didn't help.)
+
+  # if ! defined(File["/etc/${dir}facter"]) {
+  #   file { "/etc/${dir}facter":
+  #     ensure  => directory,
+  #   }
+  # }
+  # if ! defined(File["/etc/${dir}facter/facts.d"]) {
+  #   file { "/etc/${dir}facter/facts.d":
+  #     ensure  => directory,
+  #   }
+  # }
 
   if $::osfamily == 'RedHat' and $::puppetversion !~ /Puppet Enterprise/ {
     package { $json_packages:
